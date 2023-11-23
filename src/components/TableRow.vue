@@ -1,65 +1,71 @@
 <template>
-        <tr v-for="client in tableData" :key="client.o_id">
-                    <td class="id">{{ client.o_id }}</td>
-                    <td class="name">{{ client.client_name }}</td>
-                    <td>
-                        <div v-for="diet in client.diets" class="multiple-items">{{ diet }}</div>
-                    </td>
-                    <td>
-                        <div v-for="singleTariff in client.tariff" class="multiple-items">{{ singleTariff }}</div>
-                    </td>
-                    <td>{{ client.address }}</td>
-                    <td>{{ client.phone }}</td>
-                    <td>
-                        <div v-for="date in client.dates" class="multiple-items">
-                            <div>{{ getDate(date.start_date) }}-</div>
-                            <div>{{ getDate(date.end_date) }}</div>
-                            <div class="days-left">
-                                (<div v-if="daysPassed(date.start_date, date.end_date) >= 0">{{ daysPassed(date.start_date,
-                                    date.end_date) }}/</div>
-                                <div>{{ daysTotal(date.start_date, date.end_date) }}</div>)
-                            </div>
-                        </div>
-                    </td>
-                    <td>{{ client.discount }}%</td>
-                    <td class="payment">
-                        <div>Стоим.:{{ client.order_sum }}</div>
-                        <div>{{ client.pay_status }}</div>
-                        <div>Долг:{{ client.order_payed }}</div>
+    <tr>
+        <td class="id">{{ client.o_id }}</td>
+        <td class="name">{{ client.client_name }}</td>
+        <td>
+            <div v-for="diet in client.diets" class="multiple-items">{{ diet }}</div>
+        </td>
+        <td>
+            <div v-for="singleTariff in client.tariff" class="multiple-items">{{ singleTariff }}</div>
+        </td>
+        <td>{{ client.address }}</td>
+        <td>{{ client.phone }}</td>
+        <td>
+            <div v-for="date in client.dates" class="multiple-items">
+                <div>{{ getDate(date.start_date) }}-</div>
+                <div>{{ getDate(date.end_date) }}</div>
+                <div class="days-left">
+                    (<div v-if="daysPassed(date.start_date, date.end_date) >= 0">{{ daysPassed(date.start_date,
+                        date.end_date) }}/</div>
+                    <div>{{ daysTotal(date.start_date, date.end_date) }}</div>)
+                </div>
+            </div>
+        </td>
+        <td>{{ client.discount }}%</td>
+        <td class="payment">
+            <div>Стоим.:{{ client.order_sum }}</div>
+            <div>{{ client.pay_status }}</div>
+            <div>Долг:{{ client.order_payed }}</div>
 
-                    </td>
-                    <td>
-                        <div class="courier">{{ client.courier_comment }}</div>
-                    </td>
-                    <td>
-                        <div class="inner">{{ client.inner_comment }}</div>
-                    </td>
-                    <td class="status">
-                        <div v-for="date in client.dates" class="multiple-items">
-                            <div v-if="getDateStatus(date.start_date, date.end_date) === `is_going`">
-                                Заканчивается через {{ daysLeft(date.start_date, date.end_date) }}
-                                {{ wordEnd(daysLeft(date.start_date,date.end_date)) }}
-                            </div>
-                            <div v-else-if="getDateStatus(date.start_date, date.end_date) === `finished`">
-                                Завершилось {{ daysLeft(date.start_date, date.end_date) }}{{ wordEnd(daysLeft(date.start_date,
-                                date.end_date)) }} назад
-                            </div>
-                            <div v-else-if="getDateStatus(date.start_date, date.end_date) === `not_started`">
-                                Начнется через {{ daysLeft(date.start_date, date.end_date) }}{{ wordEnd(daysLeft(date.start_date,
-                                date.end_date)) }}
-                            </div>
-                        </div>
-                    </td>
-                </tr>
+        </td>
+        <td>
+            <div class="courier">{{ client.courier_comment }}</div>
+        </td>
+        <td>
+            <div class="inner">{{ client.inner_comment }}</div>
+        </td>
+        <td class="status">
+            <div v-for="date in client.dates" class="multiple-items">
+                <div v-if="getDateStatus(date.start_date, date.end_date) === `is_going`">
+                    Заканчивается через {{ daysLeft(date.start_date, date.end_date) }}
+                    {{ wordEnd(daysLeft(date.start_date, date.end_date)) }}
+                </div>
+                <div v-else-if="getDateStatus(date.start_date, date.end_date) === `finished`">
+                    Завершилось {{ daysLeft(date.start_date, date.end_date) }}{{ wordEnd(daysLeft(date.start_date,
+                        date.end_date)) }} назад
+                </div>
+                <div v-else-if="getDateStatus(date.start_date, date.end_date) === `not_started`">
+                    Начнется через {{ daysLeft(date.start_date, date.end_date) }}{{ wordEnd(daysLeft(date.start_date,
+                        date.end_date)) }}
+                </div>
+            </div>
+        </td>
+    </tr>
 </template>
 
 <script>
-import clientsData from '@/assets/data.json'
+
 
 export default {
+
+    props: {
+        client: {
+            type: Object,
+            required: true
+        }
+    },
     data() {
         return {
-            tableData: clientsData,
             options: {
                 day: 'numeric',
                 month: 'short'
@@ -96,13 +102,13 @@ export default {
             const date = new Date()
             const startDate = new Date(start)
             const endDate = new Date(end)
-            if(date < endDate && date > startDate) {
+            if (date < endDate && date > startDate) {
                 return "is_going"
             }
             else if (date > endDate) {
                 return "finished"
             }
-            else if(date < endDate && date < startDate) {
+            else if (date < endDate && date < startDate) {
                 return "not_started"
             }
         },
@@ -123,7 +129,7 @@ export default {
                 const daysGone = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
                 return daysGone
             }
-            else if(date < endDate && date < startDate) {
+            else if (date < endDate && date < startDate) {
                 const timeDifference = startDate - date
                 const daysBefore = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
                 return daysBefore
@@ -175,6 +181,7 @@ tbody>tr:nth-child(odd) {
     background-color: chartreuse;
     color: #1874CF;
 }
+
 .name {
     color: #1874CF;
 }

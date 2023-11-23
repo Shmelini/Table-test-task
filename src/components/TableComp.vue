@@ -18,7 +18,7 @@
                 </tr>
             </thead>
             <tbody>
-                <TableRow />
+                <TableRow v-for="client in tableData" :client="client"  :key="client.o_id" />
             </tbody>
         </table>
     </div>
@@ -26,30 +26,17 @@
 
 <script>
 import TableRow from '@/components/TableRow.vue'
-
+import clientsData from '@/assets/data.json'
 export default {
     components: {
         TableRow
     },
     data() {
         return {
-        //    tHeadRow: [
-        //     {id: 1, name: 'id', title: '#'},
-        //     {id: 2, name: 'name', title: 'Имя'},
-        //     {id: 3, name: 'diets', title: 'Список диет'},
-        //     {id: 4, name: 'tariff', title: 'Тарифный план'},
-        //     {id: 5, name: 'id', title: '#'},
-        //     {id: 6, name: 'id', title: '#'},
-        //     {id: 7, name: 'id', title: '#'},
-        //     {id: 8, name: 'id', title: '#'},
-        //     {id: 9, name: 'id', title: '#'},
-        //     {id: 10, name: 'id', title: '#'},
-        //     {id: 11, name: 'id', title: '#'},
-        //     {id: 12, name: 'id', title: '#'},
-        //    ]
+            tableData: clientsData,
         }
     },
-    
+
 }
 </script>
 
@@ -72,6 +59,4 @@ td {
 tbody>tr:nth-child(odd) {
     background-color: rgb(233, 233, 233);
 }
-
-
 </style>
