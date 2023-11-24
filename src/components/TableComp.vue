@@ -36,7 +36,7 @@ export default {
         return {
             tableData: clientsData,
             sort_by: null,
-            date: new Date()
+            today: new Date()
         }
     },
     methods: {
@@ -59,25 +59,35 @@ export default {
                     console.log(this.tableData[0].dates[0].start_date)
                     break;
                 case 'status_asc':
-                    this.tableData.sort((a, b) => {
-                        if (((new Date(a.dates[0].start_date) > new Date(b.dates[0].start_date)) && ((new Date(a.dates[0].end_date) < new Date(b.dates[0].end_date))))) {
-                            console.log(false)
-                            return 1
-                        }
-                        return -1
-                    })
+                    this.tableData.sort(this.compareDates)
 
                     break;
                 case 'status_desc':
-                    this.tableData.sort((a, b) => {
-                        if (((new Date(a.dates[0].start_date) > new Date(b.dates[0].start_date)) && ((new Date(a.dates[0].end_date) < new Date(b.dates[0].end_date))))) {
-                            console.log(true)
-                            return -1
-                        }
-                        return 1
-                    })
+                    this.tableData.sort(this.compareDatesRev)
                     break;
             }
+        },
+
+        // Создать функцию сравнения
+        compareDates(date1, date2) {
+            const start1 = new Date(date1.dates[0].start_date)
+            const start2 = new Date(date2.dates[0].start_date)
+            const end1 = new Date(date1.dates[0].end_date)
+            const end2 = new Date(date2.dates[0].end_date)
+            if (this.today - end1 > this.today - end2) {
+                return -1
+            }
+            return 1
+        },
+        compareDatesRev(date1, date2) {
+            const start1 = new Date(date1.dates[0].start_date)
+            const start2 = new Date(date2.dates[0].start_date)
+            const end1 = new Date(date1.dates[0].end_date)
+            const end2 = new Date(date2.dates[0].end_date)
+            if (this.today - end1 > this.today - end2) {
+                return 1
+            }
+            return -1
         },
     },
 

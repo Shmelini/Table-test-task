@@ -124,9 +124,8 @@ export default {
             const startDate = new Date(start)
             const endDate = new Date(end)
             if (date < endDate && date > startDate) {
-                const timeDifference = date - startDate
-                let daysLeft = endDate - timeDifference
-                daysLeft = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
+                const timeDifference = endDate - date
+                let daysLeft = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
                 return daysLeft
 
             }
