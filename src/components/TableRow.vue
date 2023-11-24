@@ -40,12 +40,18 @@
                     Заканчивается через {{ daysLeft(date.start_date, date.end_date) }}
                     {{ wordEnd(daysLeft(date.start_date, date.end_date)) }}
                 </div>
-                <div v-else-if="getDateStatus(date.start_date, date.end_date) === `finished`">
-                    Завершилось {{ daysLeft(date.start_date, date.end_date) }}{{ wordEnd(daysLeft(date.start_date,
+                <div v-else-if="getDateStatus(date.start_date, date.end_date) === `finished` && daysLeft(date.start_date, date.end_date) != 0 && daysLeft(date.start_date, date.end_date) != 1">
+                    Завершилось {{ daysLeft(date.start_date, date.end_date) }} {{ wordEnd(daysLeft(date.start_date,
                         date.end_date)) }} назад
                 </div>
+                <div v-else-if="getDateStatus(date.start_date, date.end_date) === `finished` && daysLeft(date.start_date, date.end_date) === 0">
+                    Завершилось сегодня
+                </div>
+                <div v-else-if="getDateStatus(date.start_date, date.end_date) === `finished` && daysLeft(date.start_date, date.end_date) === 1">
+                    Завершилось вчера
+                </div>
                 <div v-else-if="getDateStatus(date.start_date, date.end_date) === `not_started`">
-                    Начнется через {{ daysLeft(date.start_date, date.end_date) }}{{ wordEnd(daysLeft(date.start_date,
+                    Начнется через {{ daysLeft(date.start_date, date.end_date) }} {{ wordEnd(daysLeft(date.start_date,
                         date.end_date)) }}
                 </div>
             </div>

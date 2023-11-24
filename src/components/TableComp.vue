@@ -3,7 +3,7 @@
         <table>
             <thead>
                 <tr>
-                    <th @click="console.log(tableData)">#</th>
+                    <th @click="sortBy('id'), sortByDiffParams()">#</th>
                     <th>Имя</th>
                     <th>Список диет</th>
                     <th>Тарифный план</th>
@@ -14,11 +14,11 @@
                     <th>Статус оплаты</th>
                     <th>Комментарий для курьера</th>
                     <th>Специфика заказа</th>
-                    <th>Статус</th>
+                    <th @click="sortBy('status'), sortByDiffParams()">Статус</th>
                 </tr>
             </thead>
             <tbody>
-                <TableRow v-for="client in tableData" :client="client"  :key="client.o_id" />
+                <TableRow v-for="client in tableData" :client="client" :key="client.o_id" />
             </tbody>
         </table>
     </div>
@@ -27,6 +27,7 @@
 <script>
 import TableRow from '@/components/TableRow.vue'
 import clientsData from '@/assets/data.json'
+
 export default {
     components: {
         TableRow
@@ -34,7 +35,50 @@ export default {
     data() {
         return {
             tableData: clientsData,
+            sort_by: null,
+            date: new Date()
         }
+    },
+    methods: {
+        sortBy(attr) {
+            if (this.sort_by === null || this.sort_by === `${attr}_asc`) {
+                this.sort_by = `${attr}_desc`
+            } else {
+                this.sort_by = `${attr}_asc`
+            }
+
+        },
+        sortByDiffParams() {
+            switch (this.sort_by) {
+                case 'id_asc':
+                    this.tableData.sort((a, b) => a.o_id - b.o_id);
+                    console.log(this.tableData[0].dates[0].start_date)
+                    break;
+                case 'id_desc':
+                    this.tableData.sort((a, b) => b.o_id - a.o_id);
+                    console.log(this.tableData[0].dates[0].start_date)
+                    break;
+                case 'status_asc':
+                    this.tableData.sort((a, b) => {
+                        if (((new Date(a.dates[0].start_date) > new Date(b.dates[0].start_date)) && ((new Date(a.dates[0].end_date) < new Date(b.dates[0].end_date))))) {
+                            console.log(false)
+                            return 1
+                        }
+                        return -1
+                    })
+
+                    break;
+                case 'status_desc':
+                    this.tableData.sort((a, b) => {
+                        if (((new Date(a.dates[0].start_date) > new Date(b.dates[0].start_date)) && ((new Date(a.dates[0].end_date) < new Date(b.dates[0].end_date))))) {
+                            console.log(true)
+                            return -1
+                        }
+                        return 1
+                    })
+                    break;
+            }
+        },
     },
 
 }
