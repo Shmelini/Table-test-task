@@ -27,11 +27,12 @@
 <script>
 import TableRow from '@/components/TableRow.vue'
 import clientsData from '@/assets/data.json'
-
+import { myMixin } from '@/mixins/mixin'
 export default {
     components: {
         TableRow
     },
+    mixins: [myMixin],
     data() {
         return {
             tableData: clientsData,
@@ -59,36 +60,58 @@ export default {
                     console.log(this.tableData[0].dates[0].start_date)
                     break;
                 case 'status_asc':
-                    this.tableData.sort(this.compareDates)
+                    this.tableData.sort(this.compareAsc)
 
                     break;
                 case 'status_desc':
-                    this.tableData.sort(this.compareDatesRev)
+                    this.tableData.sort(this.compareDesc)
                     break;
             }
         },
 
         // Создать функцию сравнения
-        compareDates(date1, date2) {
+        compareDates(date1, date2, type) {
+            // 'not_started'1
+            // 'is_going'2
+            // 'finished'3
+            
             const start1 = new Date(date1.dates[0].start_date)
             const start2 = new Date(date2.dates[0].start_date)
             const end1 = new Date(date1.dates[0].end_date)
             const end2 = new Date(date2.dates[0].end_date)
-            if (this.today - end1 > this.today - end2) {
-                return -1
+            const status1 = this.getDateStatus(start1, end1)
+            const status2 = this.getDateStatus(start2, end2)
+            const sortVal1 = type === 'desc' ? 1 : -1
+            const sortVal2 = type === 'desc' ? -1 : 1
+            if (status1 === 'not_started') {
+                if (status2 === 'not_started') {
+                    return start1 > start2 ? sortVal1 : sortVal2
+                }
+                return sortVal1
             }
-            return 1
-        },
-        compareDatesRev(date1, date2) {
-            const start1 = new Date(date1.dates[0].start_date)
-            const start2 = new Date(date2.dates[0].start_date)
-            const end1 = new Date(date1.dates[0].end_date)
-            const end2 = new Date(date2.dates[0].end_date)
-            if (this.today - end1 > this.today - end2) {
-                return 1
+            if (status2 === 'not_started') {
+                return sortVal2
             }
-            return -1
+            if (status1 === 'is_going') {
+                if (status2 === 'is_going') {
+                    return end1 < end2 ? sortVal1 : sortVal2
+                }
+                return sortVal1
+            }
+            if (status2 === 'is_going') {
+                return sortVal2
+            }
+            if (status2 === 'finished') {
+                return end1 > end2 ? sortVal1 : sortVal2
+            }
+            return sortVal1
         },
+        compareAsc(date1, date2) {
+            return this.compareDates(date1, date2, 'asc')
+        },
+        compareDesc(date1, date2) {
+            return this.compareDates(date1, date2, 'desc')
+        }
     },
 
 }

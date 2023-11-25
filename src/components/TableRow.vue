@@ -60,10 +60,10 @@
 </template>
 
 <script>
-
+import { myMixin } from '@/mixins/mixin'
 
 export default {
-
+    mixins: [myMixin],
     props: {
         client: {
             type: Object,
@@ -104,20 +104,20 @@ export default {
             }
         },
 
-        getDateStatus(start, end) {
-            const date = new Date()
-            const startDate = new Date(start)
-            const endDate = new Date(end)
-            if (date < endDate && date > startDate) {
-                return "is_going"
-            }
-            else if (date > endDate) {
-                return "finished"
-            }
-            else if (date < endDate && date < startDate) {
-                return "not_started"
-            }
-        },
+        // getDateStatus(start, end) {
+        //     const date = new Date()
+        //     const startDate = new Date(start)
+        //     const endDate = new Date(end)
+        //     if (date < endDate && date > startDate) {
+        //         return "is_going"
+        //     }
+        //     else if (date > endDate) {
+        //         return "finished"
+        //     }
+        //     else if (date < endDate && date < startDate) {
+        //         return "not_started"
+        //     }
+        // },
         // Высчитывание оставшихся дней/дней после/дней до начала
         daysLeft(start, end) {
             const date = new Date()
