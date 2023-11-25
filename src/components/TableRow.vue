@@ -36,9 +36,16 @@
         </td>
         <td class="status">
             <div v-for="date in client.dates" class="multiple-items">
-                <div v-if="getDateStatus(date.start_date, date.end_date) === `is_going`">
+                <div v-if="getDateStatus(date.start_date, date.end_date) === `is_going`  && daysLeft(date.start_date, date.end_date) != 0 && daysLeft(date.start_date, date.end_date) != 1">
                     Заканчивается через {{ daysLeft(date.start_date, date.end_date) }}
                     {{ wordEnd(daysLeft(date.start_date, date.end_date)) }}
+                </div>
+                <div v-else-if="getDateStatus(date.start_date, date.end_date) === `is_going` && daysLeft(date.start_date, date.end_date) === 1" >
+                    Заканчивается завтра
+                    
+                </div>
+                <div v-else-if="getDateStatus(date.start_date, date.end_date) === `is_going` && daysLeft(date.start_date, date.end_date) === 0">
+                    Заканчивается сегодня
                 </div>
                 <div v-else-if="getDateStatus(date.start_date, date.end_date) === `finished` && daysLeft(date.start_date, date.end_date) != 0 && daysLeft(date.start_date, date.end_date) != 1">
                     Завершилось {{ daysLeft(date.start_date, date.end_date) }} {{ wordEnd(daysLeft(date.start_date,
@@ -103,21 +110,6 @@ export default {
                 return daysLeft
             }
         },
-
-        // getDateStatus(start, end) {
-        //     const date = new Date()
-        //     const startDate = new Date(start)
-        //     const endDate = new Date(end)
-        //     if (date < endDate && date > startDate) {
-        //         return "is_going"
-        //     }
-        //     else if (date > endDate) {
-        //         return "finished"
-        //     }
-        //     else if (date < endDate && date < startDate) {
-        //         return "not_started"
-        //     }
-        // },
         // Высчитывание оставшихся дней/дней после/дней до начала
         daysLeft(start, end) {
             const date = new Date()

@@ -60,21 +60,15 @@ export default {
                     console.log(this.tableData[0].dates[0].start_date)
                     break;
                 case 'status_asc':
-                    this.tableData.sort(this.compareAsc)
+                    this.tableData.sort(this.compareDesc)
 
                     break;
                 case 'status_desc':
-                    this.tableData.sort(this.compareDesc)
+                    this.tableData.sort(this.compareAsc)
                     break;
             }
         },
-
-        // Создать функцию сравнения
         compareDates(date1, date2, type) {
-            // 'not_started'1
-            // 'is_going'2
-            // 'finished'3
-            
             const start1 = new Date(date1.dates[0].start_date)
             const start2 = new Date(date2.dates[0].start_date)
             const end1 = new Date(date1.dates[0].end_date)
@@ -125,6 +119,12 @@ table {
 
 th {
     border-right: 1px solid black;
+}
+
+th:first-of-type:hover,
+th:last-of-type:hover {
+    background-color: rgba(161, 156, 156, 0.222);
+    font-size: 20px;
 }
 
 td {
